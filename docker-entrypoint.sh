@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ "$1" != "bin/zkServer.sh" ]; then
+	exec "$@"
+	exit 0
+fi
+
 ZOO_CFG=/opt/zookeeper/conf/zoo.cfg
 
 if [ -z "$SERVER_ID" ]; then
