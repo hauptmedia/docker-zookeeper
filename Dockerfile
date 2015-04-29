@@ -9,7 +9,8 @@ ENV		ZK_VERSION	3.4.6
 ENV		ZK_DOWNLOAD_URL http://www.eu.apache.org/dist/zookeeper/zookeeper-${ZK_VERSION}/zookeeper-${ZK_VERSION}.tar.gz
 
 ENV		ZK_INSTALL_DIR	/opt/zookeeper
-ENV		ZK_DATA_DIR	/tmp/zookeeper
+ENV		ZK_DATA_DIR	/var/lib/zookeeper/data
+ENV		ZK_DATA_LOG_DIR	/var/lib/zookeeper/log
 
 # install needed debian packages & clean up
 RUN		apt-get update && \
@@ -19,10 +20,10 @@ RUN		apt-get update && \
         	rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 # download and extract kafka 
-RUN		mkdir -p ${ZK_INSTALL_DIR} ${ZK_DATA_DIR} && \
+RUN		mkdir -p ${ZK_INSTALL_DIR} ${ZK_DATA_DIR} ${ZK_DATA_LOG_DIR} && \
 		curl -L --silent ${ZK_DOWNLOAD_URL} | tar -xz --strip=1 -C ${ZK_INSTALL_DIR} && \
 		cp ${ZK_INSTALL_DIR}/conf/zoo_sample.cfg ${ZK_INSTALL_DIR}/conf/zoo.cfg && \
-		chown -R ${RUN_USER}:${RUN_GROUP} ${ZK_INSTALL_DIR} ${ZK_DATA_DIR}
+		chown -R ${RUN_USER}:${RUN_GROUP} ${ZK_INSTALL_DIR} ${ZK_DATA_DIR} ${ZK_DATA_LOG_DIR}
 
 USER            ${RUN_USER}:${RUN_GROUP}
 
@@ -34,7 +35,7 @@ EXPOSE		2181 2888 3888
 
 COPY		docker-entrypoint.sh ${ZK_INSTALL_DIR}/bin/docker-entrypoint.sh
 
-VOLUME          ["${ZK_DATA_DIR}"]
+VOLUME          ["${ZK_DATA_DIR}", "${ZK_DATA_LOG_DIR}"]
 
 WORKDIR		${ZK_INSTALL_DIR}
 
