@@ -2,7 +2,7 @@ FROM		hauptmedia/java:oracle-java7
 
 ENV     	DEBIAN_FRONTEND noninteractive
 
-ENV		ZK_VERSION	3.4.6
+ENV		ZK_VERSION	3.4.13
 ENV		ZK_DOWNLOAD_URL http://mirror.netcologne.de/apache.org/zookeeper/zookeeper-${ZK_VERSION}/zookeeper-${ZK_VERSION}.tar.gz 
 
 ENV		ZK_INSTALL_DIR	/opt/zookeeper
